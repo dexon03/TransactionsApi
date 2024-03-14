@@ -1,4 +1,5 @@
 using Serilog;
+using Transaction.Api.Extensions;
 using Transaction.Application;
 using Transaction.Infrastructure;
 
@@ -14,7 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
@@ -29,4 +30,6 @@ app.MapControllers();
 app.UseHttpsRedirection();
 
 app.UseSerilogRequestLogging();
+
+app.ApplyMigrations();
 app.Run();
