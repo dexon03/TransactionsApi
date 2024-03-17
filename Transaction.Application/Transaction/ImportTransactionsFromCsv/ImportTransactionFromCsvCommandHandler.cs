@@ -23,7 +23,7 @@ public class ImportTransactionFromCsvCommandHandler : IRequestHandler<ImportTran
     }
     public async Task Handle(ImportTransactionFromCsvCommand request, CancellationToken cancellationToken)
     {
-        var transactionsFromCsv = _csvService.ReadCSV<TransactionImport>(request.CsvFile);
+        var transactionsFromCsv = _csvService.ReadCsv<TransactionImport>(request.CsvFile);
 
         var transactions = transactionsFromCsv.Select(tc => 
             new Models.Transaction.Transaction 

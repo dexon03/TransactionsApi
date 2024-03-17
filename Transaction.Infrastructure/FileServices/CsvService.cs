@@ -2,11 +2,11 @@
 using CsvHelper;
 using Transaction.Application.Abstractions;
 
-namespace Transaction.Infrastructure.Csv;
+namespace Transaction.Infrastructure.FileServices;
 
 public class CsvService : ICsvService
 {
-    public IEnumerable<T> ReadCSV<T>(Stream file)
+    public IEnumerable<T> ReadCsv<T>(Stream file)
     {
         var reader = new StreamReader(file);
         var csv = new CsvReader(reader, CultureInfo.InvariantCulture);

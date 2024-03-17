@@ -14,7 +14,6 @@ public class SqlConnectionFactory : ISqlConnectionFactory
     }
     public NpgsqlConnection CreateConnection()
     {
-        // StackExchange.Profiling.Data.ProfiledDbConnection;
         return new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
     }
 }

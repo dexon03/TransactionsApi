@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Transaction.Application.Abstractions;
 using Transaction.Application.Services;
 
@@ -14,7 +13,6 @@ public static class DependencyInjection
         {
             configuration.RegisterServicesFromAssembly(assembly);
         });
-        services.AddValidatorsFromAssembly(assembly);
         services.AddScoped<ITimeZoneService, TimeZoneService>();
         return services;
     }

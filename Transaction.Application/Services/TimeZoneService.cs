@@ -1,4 +1,5 @@
 ﻿using GeoTimeZone;
+using TimeZoneConverter;
 using Transaction.Application.Abstractions;
 
 namespace Transaction.Application.Services;
@@ -25,8 +26,8 @@ public class TimeZoneService : ITimeZoneService
     public TimeSpan GetTimeZoneOffsetFromCoordinates(string coordinates)
     {
         var timeZone = GetTimeZone(coordinates);
-        var tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
-        return tzi.BaseUtcOffset;
+        var offset = TZConvert.GetTimeZoneInfo(timeZone).BaseUtcOffset;
+        return offset;
     }
 
     private string GetTimeZone(string coordinates)

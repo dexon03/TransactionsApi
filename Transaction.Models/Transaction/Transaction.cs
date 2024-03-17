@@ -23,6 +23,4 @@ public class Transaction
     public string ClientLocation { get; set; }
     [Column("offset")]
     public TimeSpan Offset { get; set; }
-    // [Column("timeZoneId")]
-    // public string TimeZoneId { get; set; }
 }

@@ -1,5 +1,6 @@
 using Serilog;
 using Transaction.Api.Extensions;
+using Transaction.Api.Middlewares;
 using Transaction.Application;
 using Transaction.Infrastructure;
 
@@ -31,4 +32,5 @@ app.UseHttpsRedirection();
 app.UseSerilogRequestLogging();
 
 app.ApplyMigrations();
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.Run();

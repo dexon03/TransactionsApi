@@ -2,5 +2,5 @@
 
 public interface ICsvService
 {
-    public IEnumerable<T> ReadCSV<T>(Stream file);
+    public IEnumerable<T> ReadCsv<T>(Stream file);
 }

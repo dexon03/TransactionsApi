@@ -57,7 +57,7 @@ namespace Transaction.Infrastructure.Migrations
 
                     b.HasKey("TransactionId");
 
-                    b.ToTable("transactions");
+                    b.ToTable("transactions", (string)null);
                 });
 #pragma warning restore 612, 618
         }
