@@ -13,6 +13,7 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(opt 
             => opt.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
         services.AddScoped<ICsvService, CsvService>();
+        services.AddScoped<ISqlConnectionFactory, SqlConnectionFactory>();
         return services;
     }
     

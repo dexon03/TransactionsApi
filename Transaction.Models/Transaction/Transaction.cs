@@ -1,16 +1,28 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Security.AccessControl;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Transaction.Models.Transaction;
 
+[Table("transactions")]
 public class Transaction
 {
     [Key]
-    public string Transaction_Id { get; set; }
+    //column name
+    [Column("transactionId")]
+    public string TransactionId { get; set; }
+    [Column("name")]
     public string Name { get; set; }
     [EmailAddress]
+    [Column("email")]
     public string Email { get; set; }
-    public string Amount { get; set; }
-    public DateTimeOffset Transaction_Date { get; set; }
-    public string Client_Location { get; set; }
+    [Column("amount")]
+    public decimal Amount { get; set; }
+    [Column("transactionDate")]
+    public DateTime TransactionDate { get; set; }
+    [Column("clientLocation")]
+    public string ClientLocation { get; set; }
+    [Column("offset")]
+    public TimeSpan Offset { get; set; }
+    // [Column("timeZoneId")]
+    // public string TimeZoneId { get; set; }
 }

@@ -12,6 +12,8 @@
     
   transaction.api:
     image: transaction.api
+    ports:
+      - "5000:8080"
     build:
       context: .
       dockerfile: Transaction.Api/Dockerfile

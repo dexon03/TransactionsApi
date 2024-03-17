@@ -15,25 +15,15 @@ public class GetTransactionByYearInApiTimeZoneQueryHandler : IRequestHandler<Get
     }
     public async Task<IEnumerable<Models.Transaction.Transaction>> Handle(GetTransactionByYearInApiTimeZoneQuery request, CancellationToken cancellationToken)
     {
-        await using var connection = _sqlConnectionFactory.CreateConnection();
-        var query = $"""
-                     select * from Transactions
-                     where YEAR(TransactionDate) = @Year
-                     """;
-        var transactions = 
-            await connection.QueryAsync<Models.Transaction.Transaction>(query, new { request.Year});
-        
-        // var currentTimeZone = DateTimeOffset.Now.Offset;
-        // foreach (var transaction in transactions)
-        // {
-        //     var coordinates = transaction.Client_Location;
-        //     var latitude = Convert.ToDouble(coordinates.Split(',')[0]);
-        //     var longitude = Convert.ToDouble(coordinates.Split(',')[1]);
-        //     var timeZone = TimeZoneLookup.GetTimeZone(latitude, longitude).Result;
-        //     TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById("US Eastern Standard Time");
-        //     var test = tzi.BaseUtcOffset;
-        // }
-        
+         await using var connection = _sqlConnectionFactory.CreateConnection();
+         var currentTimeZoneOffset = DateTimeOffset.Now.Offset;
+         var query = $"""
+                      select * from transactions
+                      where date_part('Year',"transactionDate") = @Year and "offset" = @currentTimeZoneOffset
+                      """;
+         var transactions = 
+             await connection.QueryAsync<Models.Transaction.Transaction>(query, new { request.Year, currentTimeZoneOffset});
+         
         return transactions;
     }
 }

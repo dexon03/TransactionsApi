@@ -12,7 +12,7 @@ using Transaction.Infrastructure;
 namespace Transaction.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240314120437_Initial")]
+    [Migration("20240315124038_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -27,31 +27,40 @@ namespace Transaction.Infrastructure.Migrations
 
             modelBuilder.Entity("Transaction.Models.Transaction.Transaction", b =>
                 {
-                    b.Property<string>("Transaction_Id")
-                        .HasColumnType("text");
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("text")
+                        .HasColumnName("transaction_id");
 
-                    b.Property<string>("Amount")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric")
+                        .HasColumnName("amount");
 
-                    b.Property<string>("Client_Location")
+                    b.Property<string>("ClientLocation")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("client_location");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("email");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
-                    b.Property<DateTimeOffset>("Transaction_Date")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<TimeSpan>("Offset")
+                        .HasColumnType("interval")
+                        .HasColumnName("offset");
 
-                    b.HasKey("Transaction_Id");
+                    b.Property<DateTime>("TransactionDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("transaction_date");
 
-                    b.ToTable("Transactions");
+                    b.HasKey("TransactionId");
+
+                    b.ToTable("transactions");
                 });
 #pragma warning restore 612, 618
         }
