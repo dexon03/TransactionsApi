@@ -22,7 +22,7 @@ public class TransactionController: ControllerBase
     [HttpGet("user-timezone")]
     public async Task<IActionResult> GetTransactionsByYearInUserTimeZone([FromQuery]GetTransactionsInUserTimeZoneRequest request)
     {
-        var transactions = await _mediator.Send(new GetTransactionByDateInUserTimeZoneQuery(request.Year, request.Month, request.UserOffset));
+        var transactions = await _mediator.Send(new GetTransactionByDateInUserTimeZoneQuery(request.Year, request.Month));
         
         return Ok(transactions);
     }

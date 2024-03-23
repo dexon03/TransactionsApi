@@ -1,10 +1,12 @@
 ﻿using Dapper;
 using MediatR;
+using TimeZoneConverter;
 using Transaction.Application.Abstractions;
+using Transaction.Application.Dtos;
 
 namespace Transaction.Application.Transaction.GetTransactionDateApiTimeZone;
 
-public class GetTransactionByDateInApiTimeZoneQueryHandler : IRequestHandler<GetTransactionByDateInApiTimeZoneQuery, IEnumerable<Models.Transaction.Transaction>>
+public class GetTransactionByDateInApiTimeZoneQueryHandler : IRequestHandler<GetTransactionByDateInApiTimeZoneQuery, IEnumerable<TransactionsInApiTimeZoneQueryResult>>
 {
     private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
@@ -12,25 +14,23 @@ public class GetTransactionByDateInApiTimeZoneQueryHandler : IRequestHandler<Get
     {
         _sqlConnectionFactory = sqlConnectionFactory;
     }
-    public async Task<IEnumerable<Models.Transaction.Transaction>> Handle(GetTransactionByDateInApiTimeZoneQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<TransactionsInApiTimeZoneQueryResult>> Handle(GetTransactionByDateInApiTimeZoneQuery request, CancellationToken cancellationToken)
     {
          await using var connection = _sqlConnectionFactory.CreateConnection();
-         var currentTimeZoneOffset = DateTimeOffset.Now.Offset;
-         var whereClause = $"\"offset\" = @currentTimeZoneOffset";
+         var currentTimeZoneId = TZConvert.WindowsToIana(TimeZoneInfo.Local.Id);
+         var castUtcToCurrent = $"\"utcTransactionDate\" at time zone '{currentTimeZoneId}'";
+         
+         var whereClause = $"date_part('Year', {castUtcToCurrent} ) = @Year";
          if (request.Month.HasValue)
          {
-             whereClause += $" AND date_part('Month', \"transactionDate\") = @Month";
+             whereClause += $" AND date_part('Month', {castUtcToCurrent}) = @Month";
          };
-         if (request.Year.HasValue)
-         {
-             whereClause += $" AND date_part('Year', \"transactionDate\") = @Year";
-         }
          var query = $"""
-                      select * from transactions
+                      select *, {castUtcToCurrent} as transactionDateInCurrent from transactions
                       where {whereClause}
                       """;
          var transactions = 
-             await connection.QueryAsync<Models.Transaction.Transaction>(query, new { request.Year, request.Month, currentTimeZoneOffset});
+             await connection.QueryAsync<TransactionsInApiTimeZoneQueryResult>(query, new { request.Year, request.Month, currentTimeZone = currentTimeZoneId});
          
         return transactions;
     }

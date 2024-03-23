@@ -17,10 +17,10 @@ public class Transaction
     public string Email { get; set; }
     [Column("amount")]
     public decimal Amount { get; set; }
-    [Column("transactionDate")]
-    public DateTime TransactionDate { get; set; }
+    [Column("utcTransactionDate")]
+    public DateTimeOffset UtcTransactionDate { get; set; }
     [Column("clientLocation")]
     public string ClientLocation { get; set; }
-    [Column("offset")]
-    public TimeSpan Offset { get; set; }
+    [Column("timeZoneId")]
+    public string TimeZoneId { get; set; }
 }

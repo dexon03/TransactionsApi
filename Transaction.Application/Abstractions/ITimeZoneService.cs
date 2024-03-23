@@ -2,6 +2,6 @@
 
 public interface ITimeZoneService
 {
-    string GetTimeZoneId(string coordinates);
+    TimeZoneInfo GetTimeZoneInfo(string coordinates);
     TimeSpan GetTimeZoneOffsetFromCoordinates(string coordinates);
 }

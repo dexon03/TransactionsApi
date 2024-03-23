@@ -11,10 +11,11 @@ public class TimeZoneService : ITimeZoneService
     /// </summary>
     /// <param name="coordinates"></param>
     /// <returns></returns>
-    public string GetTimeZoneId(string coordinates)
+    public TimeZoneInfo GetTimeZoneInfo(string coordinates)
     {
         var timeZone = GetTimeZone(coordinates);
-        return timeZone;
+        var timeZoneInfo = TZConvert.GetTimeZoneInfo(timeZone);
+        return timeZoneInfo;
     }
     
     
