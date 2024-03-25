@@ -19,17 +19,20 @@ public class GetTransactionByDateInUserTimeZoneQueryHandler : IRequestHandler<Ge
         await using var connection = _sqlConnectionFactory.CreateConnection();
         
         var castUtcToLocal = $"\"utcTransactionDate\" at time zone t.\"timeZoneId\"";
-        var whereClause = $"date_part('Year', {castUtcToLocal}) = @Year";
-        if (request.Month.HasValue)
-        {
-            whereClause += $" AND date_part('Month', {castUtcToLocal}) = @Month";
-        }
+        var whereClause = $"DATE({castUtcToLocal}) between @dateFrom and @dateTo";
+        // if (request.Month.HasValue)
+        // {
+        //     whereClause += $" AND date_part('Month', {castUtcToLocal}) = @Month";
+        // }
         var query = $"""
-                     select *, {castUtcToLocal} as localTransactionDate from transactions t
+                     select *, {castUtcToLocal} as localTransactionDate from transactions
                      where {whereClause}
                      """;
+        
+        var dateFrom = request.DateFrom.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc);
+        var dateTo = request.DateTo.ToDateTime(TimeOnly.MaxValue, DateTimeKind.Utc);
         var transactions = 
-            await connection.QueryAsync<TransactionInLocalTimeZoneQueryResult>(query, new { request.Year, request.Month});
+            await connection.QueryAsync<TransactionInLocalTimeZoneQueryResult>(query, new { dateFrom, dateTo});
         
         return transactions;
     }

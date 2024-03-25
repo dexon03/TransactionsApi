@@ -20,17 +20,19 @@ public class GetTransactionByDateInApiTimeZoneQueryHandler : IRequestHandler<Get
          var currentTimeZoneId = TZConvert.WindowsToIana(TimeZoneInfo.Local.Id);
          var castUtcToCurrent = $"\"utcTransactionDate\" at time zone '{currentTimeZoneId}'";
          
-         var whereClause = $"date_part('Year', {castUtcToCurrent} ) = @Year";
-         if (request.Month.HasValue)
-         {
-             whereClause += $" AND date_part('Month', {castUtcToCurrent}) = @Month";
-         };
+         var whereClause = $"DATE({castUtcToCurrent}) between @dateFrom and @dateTo";
+         // if (request.Month.HasValue)
+         // {
+         //     whereClause += $" AND date_part('Month', {castUtcToCurrent}) = @Month";
+         // };
          var query = $"""
                       select *, {castUtcToCurrent} as transactionDateInCurrent from transactions
                       where {whereClause}
                       """;
+         var dateFrom = request.DateFrom.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc);
+         var dateTo = request.DateTo.ToDateTime(TimeOnly.MaxValue, DateTimeKind.Utc);
          var transactions = 
-             await connection.QueryAsync<TransactionsInApiTimeZoneQueryResult>(query, new { request.Year, request.Month, currentTimeZone = currentTimeZoneId});
+             await connection.QueryAsync<TransactionsInApiTimeZoneQueryResult>(query, new { dateFrom, dateTo, currentTimeZone = currentTimeZoneId});
          
         return transactions;
     }

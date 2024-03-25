@@ -4,6 +4,7 @@ using Transaction.Application.Dtos;
 using Transaction.Application.Transaction.ExportTransactionsToExcel;
 using Transaction.Application.Transaction.GetTransactionByDateInUserTimeZone;
 using Transaction.Application.Transaction.GetTransactionDateApiTimeZone;
+using Transaction.Application.Transaction.GetTransactionsInInterval;
 using Transaction.Application.Transaction.ImportTransactionsFromCsv;
 
 namespace Transaction.Api.Controllers;
@@ -20,17 +21,25 @@ public class TransactionController: ControllerBase
     }
     
     [HttpGet("user-timezone")]
-    public async Task<IActionResult> GetTransactionsByYearInUserTimeZone([FromQuery]GetTransactionsInUserTimeZoneRequest request)
+    public async Task<IActionResult> GetTransactionsByYearInUserTimeZone([FromQuery]GetTransactionInInterval request)
     {
-        var transactions = await _mediator.Send(new GetTransactionByDateInUserTimeZoneQuery(request.Year, request.Month));
+        var transactions = await _mediator.Send(new GetTransactionByDateInUserTimeZoneQuery(request.DateFrom, request.DateTo));
         
         return Ok(transactions);
     }
     
     [HttpGet("api-timezone")]
-    public async Task<IActionResult> GetTransactionsByYearInApiTimeZone([FromQuery]GetTransactionsInApiTimeZoneRequest request)
+    public async Task<IActionResult> GetTransactionsByYearInApiTimeZone([FromQuery]GetTransactionInInterval request)
     {
-        var transactions = await _mediator.Send(new GetTransactionByDateInApiTimeZoneQuery(request.Year, request.Month));
+        var transactions = await _mediator.Send(new GetTransactionByDateInApiTimeZoneQuery(request.DateFrom, request.DateTo));
+        
+        return Ok(transactions);
+    }
+    
+    [HttpGet("interval")]
+    public async Task<IActionResult> GetTransactionsInInterval([FromQuery]GetTransactionInInterval request)
+    {
+        var transactions = await _mediator.Send(new GetTransactionsInIntervalQuery(request.DateFrom, request.DateTo));
         
         return Ok(transactions);
     }

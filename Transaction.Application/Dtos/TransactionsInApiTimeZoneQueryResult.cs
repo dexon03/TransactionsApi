@@ -2,5 +2,5 @@
 
 public record TransactionsInApiTimeZoneQueryResult : TransactionsQueryResultBase
 {
-    public DateTimeOffset TransactionDateInCurrent { get; set; }
+    public DateTime TransactionDateInCurrent { get; set; }
 }

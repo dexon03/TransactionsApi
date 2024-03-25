@@ -18,7 +18,6 @@ public class TimeZoneService : ITimeZoneService
         return timeZoneInfo;
     }
     
-    
     /// <summary>
     /// Returns the time zone offset for a given set of coordinates
     /// </summary>
